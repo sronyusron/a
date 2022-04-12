@@ -191,7 +191,7 @@ const functionInputReff = (userId, deviceId, reffCode, accessToken) => new Promi
                 const idOrder = getNumber.split(':')[1]
                 const nomor = getNumber.split(':')[2].slice(2)
                 
-                const email = `${random.first()}${randomize('0', 5)}@gmail.com`
+                const email = `${random.first()}${randomize('0', 5)}@eluvit.com`
 
                 console.log(`${email} | ${nomor}`)
     
