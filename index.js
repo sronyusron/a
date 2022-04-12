@@ -3,7 +3,7 @@ const readline = require('readline-sync')
 var random = require('random-name');
 var randomize = require('randomatic');
 
-const keyOtp = '125570Uef05e3ab662acb002333848d8cd06be8'
+const keyOtp = ''
 
 const functionChangeConfirm = (idOrder) => new Promise((resolve, reject) => {
     fetch(`https://smshub.org/stubs/handler_api.php?api_key=${keyOtp}&action=setStatus&status=6&id=${idOrder}`, { 
