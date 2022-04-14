@@ -2,11 +2,12 @@ const fetch = require('node-fetch');
 const readline = require('readline-sync')
 var random = require('random-name');
 var randomize = require('randomatic');
+var fs = require('fs-extra')
 
-const keyOtp = '125570Uef05e3ab662acb002333848d8cd06be8'
+const keyOtp = ''
 
-const functionChangeConfirm = (idOrder) => new Promise((resolve, reject) => {
-    fetch(`https://smshub.org/stubs/handler_api.php?api_key=${keyOtp}&action=setStatus&status=6&id=${idOrder}`, { 
+const functionChangeActive = (idOrder, api) => new Promise((resolve, reject) => {
+    fetch(`https://${api}/stubs/handler_api.php?api_key=${keyOtp}&action=setStatus&status=1&id=${idOrder}`, { 
         method: 'GET'
     })
     .then(res => res.text())
@@ -16,8 +17,8 @@ const functionChangeConfirm = (idOrder) => new Promise((resolve, reject) => {
     .catch(err => reject(err))
 });
 
-const functionChangeCancel = (idOrder) => new Promise((resolve, reject) => {
-    fetch(`https://smshub.org/stubs/handler_api.php?api_key=${keyOtp}&action=setStatus&status=8&id=${idOrder}`, { 
+const functionChangeConfirm = (idOrder, api) => new Promise((resolve, reject) => {
+    fetch(`https://${api}/stubs/handler_api.php?api_key=${keyOtp}&action=setStatus&status=6&id=${idOrder}`, { 
         method: 'GET'
     })
     .then(res => res.text())
@@ -27,8 +28,8 @@ const functionChangeCancel = (idOrder) => new Promise((resolve, reject) => {
     .catch(err => reject(err))
 });
 
-const functionGetNumber = () => new Promise((resolve, reject) => {
-    fetch(`https://smshub.org/stubs/handler_api.php?api_key=${keyOtp}&action=getNumber&service=ot&operator=&country=6`, { 
+const functionChangeCancel = (idOrder, api) => new Promise((resolve, reject) => {
+    fetch(`https://${api}/stubs/handler_api.php?api_key=${keyOtp}&action=setStatus&status=8&id=${idOrder}`, { 
         method: 'GET'
     })
     .then(res => res.text())
@@ -38,8 +39,8 @@ const functionGetNumber = () => new Promise((resolve, reject) => {
     .catch(err => reject(err))
 });
 
-const functionGetOtp = (idOrder) => new Promise((resolve, reject) => {
-    fetch(`https://smshub.org/stubs/handler_api.php?api_key=${keyOtp}&action=getStatus&id=${idOrder}`, { 
+const functionGetNumber = (api) => new Promise((resolve, reject) => {
+    fetch(`https://${api}/stubs/handler_api.php?api_key=${keyOtp}&action=getNumber&service=ot&operator=&country=6`, { 
         method: 'GET'
     })
     .then(res => res.text())
@@ -49,8 +50,19 @@ const functionGetOtp = (idOrder) => new Promise((resolve, reject) => {
     .catch(err => reject(err))
 });
 
-const functionGetBalance = () => new Promise((resolve, reject) => {
-    fetch(`https://smshub.org/stubs/handler_api.php?api_key=${keyOtp}&action=getBalance`, { 
+const functionGetOtp = (idOrder, api) => new Promise((resolve, reject) => {
+    fetch(`https://${api}/stubs/handler_api.php?api_key=${keyOtp}&action=getStatus&id=${idOrder}`, { 
+        method: 'GET'
+    })
+    .then(res => res.text())
+    .then(result => {
+        resolve(result);
+    })
+    .catch(err => reject(err))
+});
+
+const functionGetBalance = (api) => new Promise((resolve, reject) => {
+    fetch(`https://${api}/stubs/handler_api.php?api_key=${keyOtp}&action=getBalance`, { 
         method: 'GET'
     })
     .then(res => res.text())
@@ -65,7 +77,7 @@ const functionSendOtp = (nomor) => new Promise((resolve, reject) => {
         phoneNumber: nomor
     }
 
-    fetch('http://13.229.135.159:8001/sendOtp', { 
+    fetch('http://54.179.171.207:8001/sendOtp', { 
         method: 'POST',
         body: JSON.stringify(bodys),
         headers: {
@@ -86,7 +98,7 @@ const functionGetToken = (userId, deviceId, otpLink) => new Promise((resolve, re
         otpLink: otpLink
     }
 
-    fetch('http://13.229.135.159:8001/getToken', { 
+    fetch('http://54.179.171.207:8001/getToken', { 
         method: 'POST',
         body: JSON.stringify(bodys),
         headers: {
@@ -107,7 +119,7 @@ const functionVeryfToken = (userId, deviceId, token) => new Promise((resolve, re
         token: token
     }
 
-    fetch('http://13.229.135.159:8001/veryfToken', { 
+    fetch('http://54.179.171.207:8001/veryfToken', { 
         method: 'POST',
         body: JSON.stringify(bodys),
         headers: {
@@ -128,7 +140,7 @@ const functionProfile = (userId, deviceId, email) => new Promise((resolve, rejec
         email: email
     }
 
-    fetch('http://13.229.135.159:8001/profile', { 
+    fetch('http://54.179.171.207:8001/profile', { 
         method: 'POST',
         body: JSON.stringify(bodys),
         headers: {
@@ -150,7 +162,7 @@ const functionInputReff = (userId, deviceId, reffCode, accessToken) => new Promi
         accessToken: accessToken
     }
 
-    fetch('http://13.229.135.159:8001/reff', { 
+    fetch('http://54.179.171.207:8001/reff', { 
         method: 'POST',
         body: JSON.stringify(bodys),
         headers: {
@@ -168,6 +180,22 @@ const functionInputReff = (userId, deviceId, reffCode, accessToken) => new Promi
 
     let jmlReffBerhasil = 0;
 
+    let api = ''
+    
+    do {
+        console.log('Service OTP\n1. SMSHUB\n2. SMS RU')
+        var askApi = readline.question('Pilih service: ')
+
+        if(askApi == 1){
+            api = 'smshub.org'
+        } else if(askApi == 2){
+            api = 'api.sms-activate.org'
+        } else {
+            console.log('Service tidak tersedia\n')
+        }
+
+    } while(askApi >= 3 || isNaN(askApi))
+
     const reffCode = readline.question('Reff code: ')
     const jmlReff = readline.question('Jumlah Reff : ')
 
@@ -178,20 +206,20 @@ const functionInputReff = (userId, deviceId, reffCode, accessToken) => new Promi
         try {
 
             do {
-                var getBalance = await functionGetBalance()
+                var getBalance = await functionGetBalance(api)
             } while(!getBalance.includes('ACCESS_BALANCE'))
 
             const balance = getBalance.split(':')[1]
 
             if(balance >= 7){
                 do{
-                    var getNumber = await functionGetNumber()
+                    var getNumber = await functionGetNumber(api)
                 } while(!getNumber.includes('ACCESS_NUMBER'))
 
                 const idOrder = getNumber.split(':')[1]
                 const nomor = getNumber.split(':')[2].slice(2)
                 
-                const email = `${random.first()}${randomize('0', 5)}@eluvit.com`
+                const email = `${random.first()}${randomize('0', 5)}@gmail.com`
 
                 console.log(`${email} | ${nomor}`)
     
@@ -207,9 +235,13 @@ const functionInputReff = (userId, deviceId, reffCode, accessToken) => new Promi
 
                     console.log(`Sedang menunggu link verify`)
 
+                    if(api == 'api.sms-activate.org'){
+                        await functionChangeActive(idOrder, api)
+                    }
+
                     do{
                         countGetOtp++   
-                        var getOtp = await functionGetOtp(idOrder)
+                        var getOtp = await functionGetOtp(idOrder, api)
                         if(getOtp.includes('Hopper')){
                             statusOtp = true;
                         }
@@ -246,11 +278,14 @@ const functionInputReff = (userId, deviceId, reffCode, accessToken) => new Promi
         
                                     if(inputReff.result.message == 'Reff success'){
                                         jmlReffBerhasil++
-                                        console.log(`Reff berhasil ${jmlReffBerhasil}\n`)
-                                        await functionChangeConfirm(idOrder)
+                                        console.log(`Reff berhasil ${jmlReffBerhasil} | Kode reff : ${inputReff.result.reffCode} | Saved on hopperAcc.txt\n`)
+                                        await functionChangeConfirm(idOrder, api)
+                                        await fs.appendFile('hopperAcc.txt',`${email}|${nomor}|${inputReff.result.reffCode}`+'\r\n', err => {
+                                            if (err) throw err;
+                                        })
                                     } else {
                                         console.log('Reff gagal\n')
-                                        await functionChangeConfirm(idOrder)
+                                        await functionChangeConfirm(idOrder, api)
                                     }
         
                                 } else {
@@ -263,11 +298,11 @@ const functionInputReff = (userId, deviceId, reffCode, accessToken) => new Promi
         
                         } else {
                             console.log('Link token gagal diverifikasi\n')
-                            await functionChangeCancel(idOrder)
+                            await functionChangeCancel(idOrder, api)
                         }
                     } else {
                         console.log('Link token gagal didapatkan\n')
-                        await functionChangeCancel(idOrder)
+                        await functionChangeCancel(idOrder, api)
                     }
     
                 } else {
