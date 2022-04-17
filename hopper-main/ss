@@ -1,0 +1,23 @@
+#### APIKEY OTP ####
+API_KEY=
+#### APIKEY OTP ####
+
+#### LICENSE KEY ####
+LICENSE_KEY=
+#### LICENSE KEY ####
+
+### DOMAIN JIKA INGIN DIGANTI###
+DOMAIN=gmail.com
+### DOMAIN ###
+
+#### JIKA INGIN MENGGANTI OTP NEGARA####
+COUNTRY_ID=6
+#### JIKA INGIN MENGGANTI OTP NEGARA####
+
+### LIST ID NEGARA ####
+0 = Rusia
+6 = Indonesia
+10 = Vietnam
+### LIST ID NEGARA ####
+
+## SMS RU TIDAK BISA PAKAI RUSIA DAN VIETNAM##
