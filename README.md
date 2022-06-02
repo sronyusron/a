@@ -1,22 +1,7 @@
-# hopper
+# hophop-v2
 
-**index.js**
-Auto register dengan SMSHUB / SMS RU menggunakan email random
+ index.js = add friends / referral ke akun utama yang telah dibuat secara manual maupun hasil create dari bot
 
-**index_delete.js**
-Auto register dengan SMSHUB menggunakan email random, setelah register akun tersebut akan dihapus, lalu nomor tersebut dapat digunakan kembali(fresh akun)
+**CARA INSTALL SILAKAN LIHAT VIDEO BERIKUT**
 
-**auto_trick.js**
-Auto register dengan SMSHUB / SMS RU menggunakan gmail dotrick
-
-**manual.js**
-Manual register dengan request email dan nomor (fisik / non fisik)
-
-**manual_delete.js**
-Manual register dengan request nomor (fisik/non fisik), setelah berhasil register akun tersebut akan dihapus, lalu nomor tersebut dapat digunakan kembali(fresh akun)
-
-**getReff.js**
-Mendapatkan kode referral akun yang sudah dibuat / belum dibuat
-
-**cekSaldo.js**
-Cek cash carrot akun yang sudah dibuat
+https://bit.ly/3mbNKwI
